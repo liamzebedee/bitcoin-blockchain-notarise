@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -11,15 +13,21 @@ app = Flask(__name__)
 
 
 # Temporary measure to stop outsiders from using service.
-AUTH_TOKEN = ''
+AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 # Prefix for data inserted in OP_RETURN
 DATA_PREFIX = 'VDICT '
 
-FUND_WALLET_SECRET = ''
-FEDERATION_WALLET_SECRET = ''
+FUND_WALLET_SECRET = os.environ.get('FUND_WALLET_SECRET')
+FEDERATION_WALLET_SECRET = os.environ.get('FED_WALLET_SECRET')
+
+if not AUTH_TOKEN or not FUND_WALLET_SECRET or not FEDERATION_WALLET_SECRET:
+	raise Exception("Bad config")
+
 
 fund_wallet = Wallet(FUND_WALLET_SECRET)
 fed_wallet = Wallet(FEDERATION_WALLET_SECRET)
+
+
 
 
 
@@ -59,33 +67,39 @@ def index():
 def notarise():
 	tx_hex = ''
 
+	# try:
+	data = request.form['data']
+	auth_token = request.form['token']
+
+	print("POST with "+data)
+
+	if(auth_token != AUTH_TOKEN):
+		raise InvalidUsage('Not authorized for token', status_code=403)
+	
+	if(len(data) < 16):
+		raise InvalidUsage('Data needs to be 16+ bytes', status_code=400)
+
 	try:
-		data = request.form['data']
-		auth_token = request.form['token']
+		int(data, 16)
+	except ValueError as ex:
+		raise InvalidUsage('Data needs to be in hexadecimal form', status_code=400)
 
-		if(auth_token != AUTH_TOKEN):
-			raise InvalidUsage('Not authorized for token', status_code=403)
-		
-		if(len(data) < 16):
-			raise InvalidUsage('Data needs to be 16+ bytes', status_code=400)
+	data_prefixed = DATA_PREFIX + str(data)
 
-		try:
-			int(data, 16)
-		except ValueError as ex:
-			raise InvalidUsage('Data needs to be in hexadecimal form', status_code=400)
+	if(len(data_prefixed) > 80):
+		raise InvalidUsage('Data needs to be 80 bytes or less', status_code=400)
 
-		data_prefixed = DATA_PREFIX + str(data)
-
-		if(len(data_prefixed) > 80):
-			raise InvalidUsage('Data needs to be 80 bytes or less', status_code=400)
-
-		try:
-			tx_hex = generate_notarise_tx(fed_wallet.root_address[1], FEDERATION_WALLET_SECRET, data_prefixed)
-		except Exception as e:
-			raise e
-
+	try:
+		# tx_hex = generate_notarise_tx(fed_wallet.root_address[1], FEDERATION_WALLET_SECRET, data_prefixed)
+		tx_hex = '123'
 	except Exception as e:
-		raise InvalidUsage(str(e), status_code=501)
+		raise e
+
+	# except Exception as e:
+	# 	if e is InvalidUsage: 
+	# 		raise e
+
+	# 	raise InvalidUsage(str(e), status_code=501)
 	# pushTx(tx_hex)
 
 	return tx_hex
