@@ -1,0 +1,13 @@
+.bitcoin/regtest
+.eggs/
+build/
+env/
+venv/
+*.swp
+*.swn
+*.pyc
+docs/build
+docs/static
+transactions.egg-info/
+dist/
+*.bak
