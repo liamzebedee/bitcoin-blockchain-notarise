@@ -16,6 +16,7 @@ from bitcoin import bin_hash160, bin_to_b58check
 import hashlib
 from builtins import object, str, super
 import sys
+import os
 
 _magicbyte = 111
 spool = Spool()
@@ -27,7 +28,7 @@ min_confirmations = 0
 def fund_federation_wallet(fed_wallet, fund_wallet, fund_wallet_secret):
 	from_address = fund_wallet.root_address[1]
 	to_address = fed_wallet.root_address[1]
-	nfees = 20
+	nfees = 5
 	ntokens = 20
 
 	unsigned_tx = spool._t.simple_transaction(from_address,
