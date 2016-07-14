@@ -76,11 +76,11 @@ def pushTx(tx):
 if __name__ == "__main__":
 	cmd = sys.argv[1]
 
-	fund_wallet_secret = ""
-	fund_wallet = Wallet(fund_wallet_secret)
+	FUND_WALLET_SECRET = os.environ.get('FUND_WALLET_SECRET')
+	FEDERATION_WALLET_SECRET = os.environ.get('FED_WALLET_SECRET')
 
-	fed_wallet_secret = ""
-	fed_wallet = Wallet(fed_wallet_secret)
+	fund_wallet = Wallet(FUND_WALLET_SECRET)
+	fed_wallet = Wallet(FEDERATION_WALLET_SECRET)
 
 	if cmd == 'fund':
 		print("Funding federation wallet %s..." % fed_wallet.root_address[1])

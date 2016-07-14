@@ -95,13 +95,6 @@ def notarise():
 	except Exception as e:
 		raise e
 
-	# except Exception as e:
-	# 	if e is InvalidUsage: 
-	# 		raise e
-
-	# 	raise InvalidUsage(str(e), status_code=501)
-	# pushTx(tx_hex)
-
 	return tx_hex
 
 
