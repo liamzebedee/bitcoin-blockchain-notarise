@@ -28,8 +28,8 @@ min_confirmations = 0
 def fund_federation_wallet(fed_wallet, fund_wallet, fund_wallet_secret):
 	from_address = fund_wallet.root_address[1]
 	to_address = fed_wallet.root_address[1]
-	nfees = 5
-	ntokens = 20
+	nfees = os.environ.get('NFEES')
+	ntokens = os.environ.get('NTOKENS')
 
 	unsigned_tx = spool._t.simple_transaction(from_address,
 											 [(to_address, spool.FEE)] * nfees + [(to_address, spool.TOKEN)] * ntokens,
