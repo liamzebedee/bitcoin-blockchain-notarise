@@ -104,7 +104,7 @@ def notarise():
 
 
 if __name__ == "__main__":
-	host = sys.argv[1]
-    app.run(host=host, threaded=True)
+	ip = sys.argv[1]
+	app.run(host=ip, threaded=True)
 
 
