@@ -28,8 +28,8 @@ min_confirmations = 0
 def fund_federation_wallet(fed_wallet, fund_wallet, fund_wallet_secret):
 	from_address = fund_wallet.root_address[1]
 	to_address = fed_wallet.root_address[1]
-	nfees = os.environ.get('NFEES')
-	ntokens = os.environ.get('NTOKENS')
+	nfees = int(os.environ.get('NFEES'))
+	ntokens = int(os.environ.get('NTOKENS'))
 
 	unsigned_tx = spool._t.simple_transaction(from_address,
 											 [(to_address, spool.FEE)] * nfees + [(to_address, spool.TOKEN)] * ntokens,
@@ -85,8 +85,9 @@ if __name__ == "__main__":
 
 	if cmd == 'fund':
 		print("Funding federation wallet %s..." % fed_wallet.root_address[1])
-		tx = fund_federation_wallet(fed_wallet, fund_wallet, fund_wallet_secret)
-		pushTx(tx)
+		tx = fund_federation_wallet(fed_wallet, fund_wallet, FUND_WALLET_SECRET)
+		txid = pushTx(tx)
+		print("https://www.blocktrail.com/BTC/tx/%s" % txid)
 
 	elif cmd == 'notarise':
 
