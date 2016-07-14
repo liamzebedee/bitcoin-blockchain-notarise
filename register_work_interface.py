@@ -1,4 +1,5 @@
 import os
+import sys
 
 from flask import Flask
 from flask import request
@@ -103,6 +104,7 @@ def notarise():
 
 
 if __name__ == "__main__":
-    app.run(threaded=True)
+	host = sys.argv[1]
+    app.run(host=host, threaded=True)
 
 
