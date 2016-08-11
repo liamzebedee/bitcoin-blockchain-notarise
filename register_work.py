@@ -70,6 +70,7 @@ def gen_address_for_data(data):
 def pushTx(tx):
 	tx_id = spool._t.push(tx)
 	print("Pushed tx %s" % tx_id)
+	return tx_id
 
 
 
