@@ -157,14 +157,13 @@ class Transactions(object):
         """
         netcode = 'XTN' if self.testnet else 'BTC'
 
-        # TODO review
-        # check if its a wif
+        # ascribe todo: review this
         try:
-            BIP32Node.from_text(master_password)
-            return bitcoin.signall(tx, master_password)
-        except (AttributeError, EncodingError):
-            # if its not get the wif from the master secret
-            return bitcoin.signall(tx, BIP32Node.from_master_secret(master_password, netcode=netcode).subkey_for_path(path).wif())
+            # get the wif from the master secret
+            return bitcoin.signall(tx, BIP32Node.from_master_secret(master_password.encode('utf-8'), netcode=netcode).subkey_for_path(path).wif())
+        except (AttributeError, EncodingError) as err:
+            print("Error signing tx:")
+            print(err)
 
     def _select_inputs(self, address, amount, n_outputs=2, min_confirmations=6):
         # selects the inputs to fulfill the amount

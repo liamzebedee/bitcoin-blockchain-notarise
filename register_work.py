@@ -104,6 +104,8 @@ if __name__ == "__main__":
 		print('Notarising data...')
 
 		tx_hex = generate_notarise_tx(fed_wallet.root_address[1], fed_wallet_secret, data_prefixed)
+
+		print("Pushing %s" % tx_hex)
 		pushTx(tx_hex)
 
 	else:

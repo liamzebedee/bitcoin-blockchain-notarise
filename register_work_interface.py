@@ -7,7 +7,7 @@ from flask import jsonify
 
 from spool import Wallet
 
-from register_work import generate_notarise_tx
+from register_work import generate_notarise_tx, pushTx
 
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ if not AUTH_TOKEN or not FUND_WALLET_SECRET or not FEDERATION_WALLET_SECRET:
 	raise Exception("Bad config")
 
 
-fund_wallet = Wallet(FUND_WALLET_SECRET)
+fund_wallet = Wallet(FUND_WALLET_SECRET.encode('utf-8'))
 fed_wallet = Wallet(FEDERATION_WALLET_SECRET)
 
 
@@ -91,8 +91,8 @@ def notarise():
 		raise InvalidUsage('Data needs to be 80 bytes or less', status_code=400)
 
 	try:
-		# tx_hex = generate_notarise_tx(fed_wallet.root_address[1], FEDERATION_WALLET_SECRET, data_prefixed)
-		tx_hex = '123'
+		tx_hex = generate_notarise_tx(fed_wallet.root_address[1], FEDERATION_WALLET_SECRET, data_prefixed)
+
 	except Exception as e:
 		raise e
 
