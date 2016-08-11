@@ -40,7 +40,8 @@ install_requires = [
     'future>=0.15.2',
     'pycoin>=0.62',
     'requests>=2.9.1',
-    'Flask>=0.11'
+    'Flask>=0.11',
+    'pyspool>=0.2.0'
 ]
 
 tests_require = [
