@@ -7,7 +7,7 @@ from flask import jsonify
 
 from spool import Wallet
 
-from register_work import generate_notarise_tx, pushTx
+from register_work import generate_notarise_tx, push_tx
 
 
 app = Flask(__name__)
@@ -65,7 +65,7 @@ def notarise(data):
 	except Exception as e:
 		raise e
 
-	return tx_hex
+	return push_tx(tx_hex)
 
 
 
